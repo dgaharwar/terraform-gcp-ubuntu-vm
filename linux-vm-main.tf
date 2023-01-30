@@ -24,7 +24,7 @@ resource "google_compute_instance" "vm_instance_public" {
   zone         = var.gcp_zone
   hostname     = "${var.app_name}-vm${random_id.instance_id.hex}.${var.app_domain}"
   tags         = ["ssh","http"]
-  user_data    = <<EOF
+  template     = <<EOF
   #cloud-config
   runcmd:
   - <%=instance.cloudConfig.agentInstall%>
