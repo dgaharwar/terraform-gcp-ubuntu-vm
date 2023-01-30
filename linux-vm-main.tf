@@ -49,8 +49,9 @@ resource "google_compute_instance" "vm_instance_public" {
   metadata_startup_script = <<EOF
     #cloud-config
     runcmd:
-    sudo bash -c '<%=instance?.cloudConfig?.agentInstall%>'
-    sudo bash -c '<%=instance?.cloudConfig?.finalizeServer%>'
+    sudo bash -c 'echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+zlLrb2mbV90frSB/ZJCI9zBa2vCAXI4zItIHF0VoX5ADadXBC3kh8KhMOeMpuf8Plm5A4IDT2l234WkEoF7E2/1TAh5DC/hyMT5FI8hKM89o4xcXvIrC+091rA1O4LyimXRDN2W0gpxUOQ8JaDaHzt3FNEd2Qq8rTr+m+XWUmnJLGw1F2O1gArccW6G6UI9CvGkhh3+gt4E5ZHnKh0jqwvhMpr/2coXv5PWWi55f/MgYkxEBIX65ou2mqCW13ob9jQz0998o6Oy9SGjXFCZZjaxfLJnfHnC/ZqfqtQw5C3SzU8iYh1vOwldxCDrwe48ZMTZ/9XT5HbKwjVrddWdz google-ssh {"userName":"deepti.gaharwar@gmail.com"}" >> /home/deepti_gaharwar/.ssh/authorized_keys'
+    sudo bash -c '<%=instance?.cloudConfig?.agentInstall%> | tee /home/deepti_gaharwar/agentInstall.log'
+    sudo bash -c '<%=instance?.cloudConfig?.finalizeServer%> | tee /home/deepti_gaharwar/finalizeServer.log'
     EOF
 
   network_interface {
