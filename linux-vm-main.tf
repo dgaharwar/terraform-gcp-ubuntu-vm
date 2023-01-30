@@ -51,4 +51,5 @@ resource "google_compute_instance" "vm_instance_public" {
     subnetwork    = google_compute_subnetwork.network_subnet.name
     access_config { }
   }
-} 
+ } 
+}
