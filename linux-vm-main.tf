@@ -46,11 +46,11 @@ resource "google_compute_instance" "vm_instance_public" {
     }
   }
 
-  metadata_startup_script = <<-EOF
+  metadata_startup_script = <<EOF
     #!/bin/bash
-    API_KEY="<%=server.apiKey%>"
-    MORPH_URI="<%=morpheus.applianceUrl%>"
-    curl -k -s "${MORPH_URI}/api/server-script/agentInstall?apiKey=${API_KEY}" | bash
+    runcmd:
+    sudo bash -c '<%=instance?.cloudConfig?.agentInstall%>'
+    sudo bash -c '<%=instance?.cloudConfig?.finalizeServer%>'
     EOF
 
   network_interface {
