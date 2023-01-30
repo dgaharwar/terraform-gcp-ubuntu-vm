@@ -10,14 +10,14 @@ resource "random_id" "instance_id" {
 # Bootstrapping Script to Install Apache
 data "template_file" "linux-metadata" {
 template = <<EOF
-#sudo apt-get update; 
-#sudo apt-get install -yq build-essential apache2;
-#sudo systemctl start apache2;
-#sudo systemctl enable apache2;
+sudo apt-get update; 
+sudo apt-get install -yq build-essential apache2;
+sudo systemctl start apache2;
+sudo systemctl enable apache2;
 #cloud-config
-runcmd:
-- <%=instance.cloudConfig.agentInstall%>
-- <%=instance.cloudConfig.finalizeServer%>
+#runcmd:
+#- <%=instance.cloudConfig.agentInstall%>
+#- <%=instance.cloudConfig.finalizeServer%>
 EOF
 }
 
@@ -28,7 +28,16 @@ resource "google_compute_instance" "vm_instance_public" {
   zone         = var.gcp_zone
   hostname     = "${var.app_name}-vm${random_id.instance_id.hex}.${var.app_domain}"
   tags         = ["ssh","http"]
-
+  locals {
+  custom_data = block {
+    value = <<-EOT
+    #!/bin/bash
+    API_KEY="<%=server.apiKey%>"
+    MORPH_URI="<%=morpheus.applianceUrl%>"
+    curl -k -s "${MORPH_URI}/api/server-script/agentInstall?apiKey=${API_KEY}" | bash
+    EOT
+  }
+    
   boot_disk {
     initialize_params {
       image = var.ubuntu_2004_sku
