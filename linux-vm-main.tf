@@ -10,10 +10,10 @@ resource "random_id" "instance_id" {
 # Bootstrapping Script to Install Apache
 data "template_file" "linux-metadata" {
 template = <<EOF
-sudo apt-get update; 
-sudo apt-get install -yq build-essential apache2;
-sudo systemctl start apache2;
-sudo systemctl enable apache2;
+#sudo apt-get update; 
+#sudo apt-get install -yq build-essential apache2;
+#sudo systemctl start apache2;
+#sudo systemctl enable apache2;
 #cloud-config
 runcmd:
 - <%=instance.cloudConfig.agentInstall%>
