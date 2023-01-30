@@ -21,14 +21,14 @@ sudo systemctl enable apache2;
 EOF
 }
 
-data {
-  custom_data = block {
-    value = <<-EOF
-    <%=instance?.cloudConfig?.agentInstallTerraform%>
-    <%=cloudConfig?.finalizeServer%>
-    EOF
-  }
-}
+#data {
+#  custom_data = block {
+#    value = <<-EOF
+#    <%=instance?.cloudConfig?.agentInstallTerraform%>
+#    <%=cloudConfig?.finalizeServer%>
+#    EOF
+#  }
+#}
 
 
 # Create VM
@@ -38,7 +38,7 @@ resource "google_compute_instance" "vm_instance_public" {
   zone         = var.gcp_zone
   hostname     = "${var.app_name}-vm${random_id.instance_id.hex}.${var.app_domain}"
   tags         = ["ssh","http"]
-  custom_data = base64encode(data.custom_data)
+  #custom_data = base64encode(data.custom_data)
   
   boot_disk {
     initialize_params {
@@ -46,7 +46,12 @@ resource "google_compute_instance" "vm_instance_public" {
     }
   }
 
-  metadata_startup_script = data.template_file.linux-metadata.rendered
+  metadata_startup_script = <<EOF
+  #cloud-config
+  runcmd:
+  sudo bash -c '<%=instance.cloudConfig.agentInstall%>'
+  sudo bash -c '<%=instance?.cloudConfig?.finalizeServer%>'
+  EOF
 
   network_interface {
     network       = google_compute_network.vpc.name
