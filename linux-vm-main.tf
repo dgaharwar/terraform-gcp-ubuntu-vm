@@ -21,12 +21,12 @@ sudo systemctl enable apache2;
 EOF
 }
 
-locals {
+data {
   custom_data = block {
-    value = <<-EOT
+    value = <<-EOF
     <%=instance?.cloudConfig?.agentInstallTerraform%>
     <%=cloudConfig?.finalizeServer%>
-    EOT
+    EOF
   }
 }
 
@@ -38,7 +38,7 @@ resource "google_compute_instance" "vm_instance_public" {
   zone         = var.gcp_zone
   hostname     = "${var.app_name}-vm${random_id.instance_id.hex}.${var.app_domain}"
   tags         = ["ssh","http"]
-  custom_data = base64encode(local.custom_data)
+  custom_data = base64encode(data.custom_data)
   
   boot_disk {
     initialize_params {
