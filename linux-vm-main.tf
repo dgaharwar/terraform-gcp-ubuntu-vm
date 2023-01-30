@@ -49,8 +49,8 @@ resource "google_compute_instance" "vm_instance_public" {
   metadata_startup_script = <<EOF
     #cloud-config
     runcmd:
-    - <%=instance.cloudConfig.agentInstall%>
-    - <%=instance.cloudConfig.finalizeServer%>
+    sudo bash -c '<%=instance?.cloudConfig?.agentInstall%>'
+    sudo bash -c '<%=instance?.cloudConfig?.finalizeServer%>'
     EOF
 
   network_interface {
