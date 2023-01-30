@@ -1,17 +1,17 @@
 # Application Definition 
-company     = "kopicloud"
-app_name    = "iac-ubuntu"
-app_domain  = "kopicloud.com"
+company     = "morpheus"
+app_name    = "morph-ubuntu"
+app_domain  = "morpheusdata.com"
 environment = "dev" # Dev, Test, Prod, etc
 
 # GCP Settings
-gcp_project   = "kopicloud-medium"
-gcp_region    = "europe-west4"
-gcp_zone      = "europe-west4-b"
-gcp_auth_file = "../auth/kopicloud-medium.json"
+gcp_project   = "morpheusapp"
+gcp_region    = "us-central1"
+gcp_zone      = "us-central1-a"
+#gcp_auth_file = "../auth/kopicloud-medium.json"
 
 # GCP Netwok
-network-subnet-cidr = "10.10.10.0/24"
+network-subnet-cidr = "10.128.0.0/20"
 
 # Linux VM
 linux_instance_type = "f1-micro"
