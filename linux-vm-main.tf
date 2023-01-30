@@ -14,21 +14,8 @@ sudo apt-get update;
 sudo apt-get install -yq build-essential apache2;
 sudo systemctl start apache2;
 sudo systemctl enable apache2;
-#cloud-config
-#runcmd:
-#- <%=instance.cloudConfig.agentInstall%>
-#- <%=instance.cloudConfig.finalizeServer%>
 EOF
 }
-
-#data {
-#  custom_data = block {
-#    value = <<-EOF
-#    <%=instance?.cloudConfig?.agentInstallTerraform%>
-#    <%=cloudConfig?.finalizeServer%>
-#    EOF
-#  }
-#}
 
 
 # Create VM
@@ -38,7 +25,6 @@ resource "google_compute_instance" "vm_instance_public" {
   zone         = var.gcp_zone
   hostname     = "${var.app_name}-vm${random_id.instance_id.hex}.${var.app_domain}"
   tags         = ["ssh","http"]
-  #custom_data = base64encode(data.custom_data)
   
   boot_disk {
     initialize_params {
