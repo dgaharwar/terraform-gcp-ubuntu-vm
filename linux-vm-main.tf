@@ -21,14 +21,7 @@ sudo systemctl enable apache2;
 EOF
 }
 
-# Create VM
-resource "google_compute_instance" "vm_instance_public" {
-  name         = "${lower(var.company)}-${lower(var.app_name)}-${var.environment}-vm${random_id.instance_id.hex}"
-  machine_type = var.linux_instance_type
-  zone         = var.gcp_zone
-  hostname     = "${var.app_name}-vm${random_id.instance_id.hex}.${var.app_domain}"
-  tags         = ["ssh","http"]
-  locals {
+locals {
   custom_data = block {
     value = <<-EOT
     #!/bin/bash
@@ -37,6 +30,16 @@ resource "google_compute_instance" "vm_instance_public" {
     curl -k -s "${MORPH_URI}/api/server-script/agentInstall?apiKey=${API_KEY}" | bash
     EOT
   }
+}
+
+
+# Create VM
+resource "google_compute_instance" "vm_instance_public" {
+  name         = "${lower(var.company)}-${lower(var.app_name)}-${var.environment}-vm${random_id.instance_id.hex}"
+  machine_type = var.linux_instance_type
+  zone         = var.gcp_zone
+  hostname     = "${var.app_name}-vm${random_id.instance_id.hex}.${var.app_domain}"
+  tags         = ["ssh","http"]
     
   boot_disk {
     initialize_params {
@@ -51,5 +54,4 @@ resource "google_compute_instance" "vm_instance_public" {
     subnetwork    = google_compute_subnetwork.network_subnet.name
     access_config { }
   }
- } 
 }
