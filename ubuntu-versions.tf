@@ -7,9 +7,9 @@
 #  description = "SKU for Ubuntu 18.04 LTS"
 #  default     = "ubuntu-os-cloud/ubuntu-1804-lts"
 #}
-variable "ubuntu_2004_sku" {
+variable "ubuntu_sku" {
   type        = string
-  description = "SKU for Ubuntu 20.04 LTS"
+  description = "SKU for Ubuntu 20.04/22.04 LTS"
   default     = "<%=customOptions.gcpImage%>"
 }
 #variable "ubuntu_pro_1604_sku" {
