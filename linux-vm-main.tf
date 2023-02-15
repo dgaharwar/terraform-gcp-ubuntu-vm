@@ -28,7 +28,7 @@ resource "google_compute_instance" "vm_instance_public" {
   
   boot_disk {
     initialize_params {
-      image = var.ubuntu_2004_sku
+      image = var.ubuntu_sku
     }
   }
 
